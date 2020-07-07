@@ -1,17 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-using Application.Application;
 using Application.Infrastructure.InMemory;
 using Application.Infrastructure.Projections;
 using Application.Infrastructure.Projections.Scheduling.Domain.Infrastructure.Projections;
 using EventStore.Client;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Application
 {
@@ -24,14 +18,14 @@ namespace Application
             var availableSlotsRepository = new InMemoryAvailableSlotsRepository();
             var patientSlotsRepository = new InMemoryPatientSlotsRepository();
 
-            var subManager = new SubscriptionManager(
-                client,
-                "Slots",
-                StreamName.AllStream,
-                new Projector(new AvailableSlotsProjection(availableSlotsRepository)),
-                new Projector(new PatientSlotsProjection(patientSlotsRepository)));
-
-            subManager.Start();
+            // var subManager = new SubscriptionManager(
+            //     client,
+            //     "Slots",
+            //     StreamName.AllStream,
+            //     new DbProjector(new AvailableSlotsProjection(availableSlotsRepository)),
+            //     new DbProjector(new PatientSlotsProjection(patientSlotsRepository)));
+            //
+            // subManager.Start();
 
             CreateHostBuilder(args).Build().Run();
         }

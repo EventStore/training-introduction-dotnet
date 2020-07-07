@@ -9,8 +9,6 @@ public class EsAggregateStore : IAggregateStore
     {
         readonly IEventStore _store;
 
-        private readonly int _threshold;
-
         public EsAggregateStore(IEventStore store)
         {
             _store = store;

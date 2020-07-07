@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -47,7 +46,7 @@ namespace Application.Controllers
 
         [HttpPost]
         [Route("schedule")]
-        public async Task<IActionResult> Schedule([FromBody]ScheduleRequest schedule)
+        public async Task<IActionResult> Schedule([FromBody] ScheduleRequest schedule)
         {
             await _dispatcher.Dispatch(new Schedule(schedule.SlotId, schedule.StartDateTime,
                 schedule.Duration));
@@ -57,16 +56,16 @@ namespace Application.Controllers
 
         [HttpPost]
         [Route("{slotId}/book")]
-        public Task Book(string slotId, [FromBody]BookRequest book)
+        public async Task<IActionResult> Book(string slotId, [FromBody] BookRequest book)
         {
-            return _dispatcher.Dispatch(new Book(slotId, book.PatientId));
+            return Ok();
         }
 
         [HttpPost]
         [Route("{slotId}/cancel")]
-        public Task Cancel(string slotId, [FromBody]CancelRequest cancel)
+        public async Task<IActionResult> Cancel(string slotId, [FromBody] CancelRequest cancel)
         {
-            return _dispatcher.Dispatch(new Cancel(slotId, cancel.Reason, DateTime.UtcNow));
+            return Ok();
         }
     }
 
@@ -86,6 +85,4 @@ namespace Application.Controllers
     {
         public string Reason { get; set; }
     }
-
-
 }
