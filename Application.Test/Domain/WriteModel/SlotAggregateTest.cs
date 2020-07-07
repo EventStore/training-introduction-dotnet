@@ -97,30 +97,25 @@ namespace Application.Test
             });
         }
 
-        // [Fact]
-        // public async Task  cant_be_cancelled_after_start_time()
-        // {
-        //     var scheduled = new Scheduled(_idGenerator.NextGuid(), _now.Subtract(TimeSpan.FromHours(1)), _tenMinutes);
-        //     var booked = new Booked(_idGenerator.NextGuid(), scheduled.Id, RandomString());
-        //
-        //     Given(scheduled, booked);
-        //     When(new Cancel(RandomString()));
-        //     Then(new SlotAlreadyStartedException());
-        // }
-        //
-        // [Fact]
-        // public async Task  cant_be_cancelled_if_wasnt_booked()
-        // {
-        //     var scheduled = new Scheduled(_idGenerator.NextGuid(), _now.Subtract(TimeSpan.FromHours(1)), _tenMinutes);
-        //
-        //     Given(scheduled);
-        //     When(new Cancel(RandomString()));
-        //     Then(new SlotNotBookedException());
-        // }
-        //
-        // protected override SlotAggregate NewInstance()
-        // {
-        //     return new SlotAggregate(_id, () => _idGenerator.NextGuid(), () => _now);
-        // }
+        [Fact]
+        public async Task  cant_be_cancelled_after_start_time()
+        {
+            var scheduled = new Scheduled(_slotId, _now.Subtract(TimeSpan.FromHours(1)), _tenMinutes);
+            var booked = new Booked(_slotId, "patient name");
+
+            Given(scheduled, booked);
+            await When(new Cancel(_slotId, "Reason", DateTime.UtcNow));
+            Then<SlotAlreadyStartedException>();
+        }
+
+        [Fact]
+        public async Task  cant_be_cancelled_if_wasnt_booked()
+        {
+            var scheduled = new Scheduled(_slotId, _now.Subtract(TimeSpan.FromHours(1)), _tenMinutes);
+
+            Given(scheduled);
+            await When(new Cancel(_slotId, "reason",DateTime.UtcNow));
+            Then<SlotNotBookedException>();
+        }
     }
 }
