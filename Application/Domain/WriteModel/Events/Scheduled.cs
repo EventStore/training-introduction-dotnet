@@ -5,22 +5,22 @@ namespace Application.Domain.Events
 {
     public class Scheduled : Event
     {
-        public string Id { get; }
-        
+        public string SlotId { get; }
+
         public DateTime StartTime { get; }
 
         public TimeSpan Duration { get; }
 
-        public Scheduled(string id, in DateTime startTime, in TimeSpan duration)
+        public Scheduled(string slotId, in DateTime startTime, in TimeSpan duration)
         {
-            Id = id;
+            SlotId = slotId;
             StartTime = startTime;
             Duration = duration;
         }
 
         protected bool Equals(Scheduled other)
         {
-            return Id.Equals(other.Id) && StartTime.Equals(other.StartTime) && Duration.Equals(other.Duration);
+            return SlotId.Equals(other.SlotId) && StartTime.Equals(other.StartTime) && Duration.Equals(other.Duration);
         }
 
         public override bool Equals(object obj)
@@ -33,7 +33,7 @@ namespace Application.Domain.Events
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, StartTime, Duration);
+            return HashCode.Combine(SlotId, StartTime, Duration);
         }
     }
 }

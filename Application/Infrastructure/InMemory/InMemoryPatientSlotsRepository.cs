@@ -9,7 +9,7 @@ namespace Application.Infrastructure.InMemory
     {
         private List<ScheduledSlot> _scheduledSlots = new List<ScheduledSlot>();
 
-        private readonly Dictionary<String, List<PatientSlot>> _patientSlots =
+        private Dictionary<String, List<PatientSlot>> _patientSlots =
             new Dictionary<string, List<PatientSlot>>();
 
         public List<PatientSlot> getPatientSlots(string patientId)
@@ -51,7 +51,7 @@ namespace Application.Infrastructure.InMemory
             var allSlots = _patientSlots.Values.SelectMany(slots => slots.ToArray());
             var slot = allSlots.First(slot => slot.ScheduledId.Equals(scheduledEventId));
             slot.MarkAsCancelled();
-            
+
             _scheduledSlots.Add(new ScheduledSlot(slot.ScheduledId, slot.StartTime, slot.Duration));
         }
     }

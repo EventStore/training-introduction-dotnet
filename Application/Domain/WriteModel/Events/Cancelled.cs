@@ -5,18 +5,18 @@ namespace Application.Domain.Events
 {
     public class Cancelled : Event
     {
-        public string Id { get; }
+        public string SlotId { get; }
         public string Reason { get; }
 
-        public Cancelled(string id, string reason)
+        public Cancelled(string slotId, string reason)
         {
-            Id = id;
+            SlotId = slotId;
             Reason = reason;
         }
 
         protected bool Equals(Cancelled other)
         {
-            return Id.Equals(other.Id) && Reason == other.Reason;
+            return SlotId.Equals(other.SlotId) && Reason == other.Reason;
         }
 
         public override bool Equals(object obj)
@@ -29,7 +29,7 @@ namespace Application.Domain.Events
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Reason);
+            return HashCode.Combine(SlotId, Reason);
         }
     }
 }

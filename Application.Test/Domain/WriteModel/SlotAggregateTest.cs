@@ -5,11 +5,7 @@ using Application.Domain;
 using Application.Domain.Commands;
 using Application.Domain.Events;
 using Application.Domain.Exceptions;
-using Application.Domain.ReadModel;
-using Application.Domain.Service;
 using Application.Domain.WriteModel.Commands;
-using Application.EventSourcing;
-using Scheduling.Domain.Infrastructure.Commands;
 using Scheduling.Test;
 using Xunit;
 

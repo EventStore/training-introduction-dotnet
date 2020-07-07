@@ -27,7 +27,7 @@ namespace Application.Domain
             {
                 if (@event is Scheduled s)
                 {
-                    SlotId = s.Id;
+                    SlotId = s.SlotId;
                     _StartTime = s.StartTime;
                 }
                 if (@event is Booked b)

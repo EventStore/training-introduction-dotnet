@@ -1,17 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Http;
 using Application.Domain.ReadModel;
+using Application.Domain.WriteModel.Commands;
+using Application.Infrastructure.ES;
 using Application.Infrastructure.InMemory;
+using EventStore.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Scheduling.Domain.Infrastructure.Commands;
 
 namespace Application
 {
@@ -28,6 +27,15 @@ namespace Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            var client = GetEventStoreClient();
+
+            var eventStore = new EsEventStore(client);
+            var aggregateStore = new EsAggregateStore(eventStore);
+            var handlers = new Handlers(aggregateStore);
+
+            services.AddSingleton(new CommandHandlerMap(handlers));
+            services.AddSingleton<Dispatcher>();
 
             services.AddSingleton<IAvailableSlotsRepository, InMemoryAvailableSlotsRepository>();
         }
@@ -47,6 +55,26 @@ namespace Application
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+
+        private EventStoreClient GetEventStoreClient()
+        {
+            return new EventStoreClient(new EventStoreClientSettings
+            {
+                ConnectivitySettings =
+                {
+                    Address = new Uri("https://localhost:2113"),
+                },
+                DefaultCredentials = new UserCredentials("admin", "changeit"),
+                CreateHttpMessageHandler = () =>
+                    new SocketsHttpHandler
+                    {
+                        SslOptions =
+                        {
+                            RemoteCertificateValidationCallback = delegate { return true; }
+                        }
+                    }
+            });
         }
     }
 }

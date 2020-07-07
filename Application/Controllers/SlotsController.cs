@@ -11,38 +11,76 @@ using Scheduling.Domain.Infrastructure.Commands;
 namespace Application.Controllers
 {
     [ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("slots")]
+    [Route("slots")]
     public class SlotsController : ControllerBase
     {
         private readonly IAvailableSlotsRepository _availableSlotsRepository;
+        private readonly IPatientSlotsRepository _patientSlotRepository;
+
         private readonly Dispatcher _dispatcher;
 
-        public SlotsController(IAvailableSlotsRepository availableSlotsRepository, Dispatcher dispatcher)
+        public SlotsController(
+            IAvailableSlotsRepository availableSlotsRepository,
+            IPatientSlotsRepository patientSlotRepository,
+            Dispatcher dispatcher)
         {
             _availableSlotsRepository = availableSlotsRepository;
+            _patientSlotRepository = patientSlotRepository;
             _dispatcher = dispatcher;
         }
-        
+
         [HttpGet]
-        [Microsoft.AspNetCore.Mvc.Route("available/{date}")]
+        [Route("available/{date}")]
         public List<AvailableSlot> AvailableSlots(DateTime date)
         {
             return _availableSlotsRepository.getSlotsAvailableOn(date);
         }
-        
-        [HttpPost]
-        [Microsoft.AspNetCore.Mvc.Route("schedule")]
-        public Task ScheduleSlot([FromBody]ScheduleSlotRequest scheduleSlot)
+
+        [HttpGet]
+        [Route("my-slots/patientId")]
+        public List<PatientSlot> MySlots(string patientId)
         {
-            return _dispatcher.Dispatch(new Schedule(scheduleSlot.StartDateTime.ToString(), scheduleSlot.StartDateTime,
-                scheduleSlot.Duration));
+            return _patientSlotRepository.getPatientSlots(patientId);
+        }
+
+        [HttpPost]
+        [Route("schedule")]
+        public Task Schedule([FromBody]ScheduleRequest schedule)
+        {
+            return _dispatcher.Dispatch(new Schedule(schedule.StartDateTime.ToString(), schedule.StartDateTime,
+                schedule.Duration));
+        }
+
+        [HttpPost]
+        [Route("{slotId}/book")]
+        public Task Book(string slotId, [FromBody]BookRequest book)
+        {
+            return _dispatcher.Dispatch(new Book(slotId, book.PatientId));
+        }
+
+        [HttpPost]
+        [Route("{slotId}/cancel")]
+        public Task Cancel(string slotId, [FromBody]CancelRequest cancel)
+        {
+            return _dispatcher.Dispatch(new Cancel(slotId, cancel.Reason, DateTime.UtcNow));
         }
     }
 
-    public class ScheduleSlotRequest
+    public class ScheduleRequest
     {
-        public string CommandId { get; set; }
         public DateTime StartDateTime { get; set; }
         public TimeSpan Duration { get; set; }
     }
+
+    public class BookRequest
+    {
+        public string PatientId { get; set; }
+    }
+
+    public class CancelRequest
+    {
+        public string Reason { get; set; }
+    }
+
+
 }

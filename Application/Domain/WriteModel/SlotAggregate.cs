@@ -22,7 +22,7 @@ namespace Application.Domain
         {
             _isScheduled = true;
             _startTime = scheduled.StartTime;
-            Id = scheduled.Id;
+            Id = scheduled.SlotId;
         }
 
         public void Schedule(string id, DateTime startTime, TimeSpan duration)

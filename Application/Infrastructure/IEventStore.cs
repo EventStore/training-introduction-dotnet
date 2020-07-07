@@ -11,6 +11,6 @@ namespace Scheduling.Domain.Infrastructure
             params object[] events
         );
 
-        Task<IEnumerable<object>> LoadEvents(string stream, int? version = null);
+        Task<IEnumerable<object>> LoadEvents(string stream);
     }
 }
