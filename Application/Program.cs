@@ -22,15 +22,13 @@ namespace Application
             var client = GetEventStoreClient();
 
             var availableSlotsRepository = new InMemoryAvailableSlotsRepository();
-            var patientSlotsRepository = new InMemoryPatientSlotsRepository();
 
             var subManager = new SubscriptionManager(
                 client,
                 "Slots",
                 StreamName.AllStream,
-                new Projector(new AvailableSlotsProjection(availableSlotsRepository)),
-                new Projector(new PatientSlotsProjection(patientSlotsRepository)));
-
+                new Projector(new AvailableSlotsProjection(availableSlotsRepository))
+                );
             subManager.Start();
 
             CreateHostBuilder(args).Build().Run();
