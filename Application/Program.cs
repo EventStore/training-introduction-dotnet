@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Application.Domain.Service.Projections;
+using Application.Application;
 using Application.Infrastructure.InMemory;
 using Application.Infrastructure.Projections;
 using Application.Infrastructure.Projections.Scheduling.Domain.Infrastructure.Projections;

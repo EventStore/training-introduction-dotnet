@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="EventStore.Client.Grpc.Streams" Version="20.6.0-rc" />
-      <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="20.6.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
     </ItemGroup>
 
 </Project>

@@ -7,8 +7,9 @@ namespace Application.Infrastructure.InMemory
 {
     public class InMemoryAvailableSlotsRepository: IAvailableSlotsRepository
     {
-        private List<AvailableSlot> _available = new List<AvailableSlot>();
-        private List<AvailableSlot> _booked = new List<AvailableSlot>();
+        private static List<AvailableSlot> _available = new List<AvailableSlot>();
+        private static List<AvailableSlot> _booked = new List<AvailableSlot>();
+
         public void Add(AvailableSlot slot)
         {
             _available.Add(slot);
@@ -31,6 +32,12 @@ namespace Application.Infrastructure.InMemory
         public List<AvailableSlot> getSlotsAvailableOn(DateTime date)
         {
             return _available.Where(s => s.ScheduledStartTime.Date == date).ToList();
+        }
+
+        public void Clear()
+        {
+            _available.Clear();
+            _booked.Clear();
         }
     }
 }

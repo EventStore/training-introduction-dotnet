@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Domain;
-using Application.Domain.Commands;
 using Application.Domain.ReadModel;
+using Application.Domain.WriteModel.Commands;
+using Application.Infrastructure.ES;
+using EventStore.Client;
 using Microsoft.AspNetCore.Mvc;
 using Scheduling.Domain.Infrastructure.Commands;
 
@@ -45,10 +47,12 @@ namespace Application.Controllers
 
         [HttpPost]
         [Route("schedule")]
-        public Task Schedule([FromBody]ScheduleRequest schedule)
+        public async Task<IActionResult> Schedule([FromBody]ScheduleRequest schedule)
         {
-            return _dispatcher.Dispatch(new Schedule(schedule.StartDateTime.ToString(), schedule.StartDateTime,
+            await _dispatcher.Dispatch(new Schedule(schedule.SlotId, schedule.StartDateTime,
                 schedule.Duration));
+
+            return Ok();
         }
 
         [HttpPost]
@@ -68,6 +72,7 @@ namespace Application.Controllers
 
     public class ScheduleRequest
     {
+        public string SlotId { get; set; }
         public DateTime StartDateTime { get; set; }
         public TimeSpan Duration { get; set; }
     }

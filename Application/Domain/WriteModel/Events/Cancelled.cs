@@ -1,11 +1,12 @@
 using System;
 using Application.EventSourcing;
 
-namespace Application.Domain.Events
+namespace Application.Domain.WriteModel.Events
 {
     public class Cancelled : Event
     {
         public string SlotId { get; }
+
         public string Reason { get; }
 
         public Cancelled(string slotId, string reason)

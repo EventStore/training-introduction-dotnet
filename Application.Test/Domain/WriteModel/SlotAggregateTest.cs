@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Domain;
-using Application.Domain.Commands;
-using Application.Domain.Events;
-using Application.Domain.Exceptions;
+using Application.Domain.WriteModel;
 using Application.Domain.WriteModel.Commands;
+using Application.Domain.WriteModel.Events;
+using Application.Domain.WriteModel.Exceptions;
 using Scheduling.Test;
 using Xunit;
 

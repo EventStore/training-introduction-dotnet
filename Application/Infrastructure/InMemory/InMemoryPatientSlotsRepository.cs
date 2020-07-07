@@ -7,10 +7,9 @@ namespace Application.Infrastructure.InMemory
 {
     public class InMemoryPatientSlotsRepository : IPatientSlotsRepository
     {
-        private List<ScheduledSlot> _scheduledSlots = new List<ScheduledSlot>();
+        private static List<ScheduledSlot> _scheduledSlots = new List<ScheduledSlot>();
 
-        private Dictionary<String, List<PatientSlot>> _patientSlots =
-            new Dictionary<string, List<PatientSlot>>();
+        private static Dictionary<String, List<PatientSlot>> _patientSlots = new Dictionary<string, List<PatientSlot>>();
 
         public List<PatientSlot> getPatientSlots(string patientId)
         {
@@ -53,6 +52,12 @@ namespace Application.Infrastructure.InMemory
             slot.MarkAsCancelled();
 
             _scheduledSlots.Add(new ScheduledSlot(slot.ScheduledId, slot.StartTime, slot.Duration));
+        }
+
+        public void Clear()
+        {
+            _scheduledSlots.Clear();
+            _patientSlots.Clear();
         }
     }
 }

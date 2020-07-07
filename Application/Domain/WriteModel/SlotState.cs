@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Application.Domain.Events;
+using Application.Domain.WriteModel.Events;
 using Application.EventSourcing;
 
-namespace Application.Domain
+namespace Application.Domain.WriteModel
 {
     public class SlotState : AggregateState
     {

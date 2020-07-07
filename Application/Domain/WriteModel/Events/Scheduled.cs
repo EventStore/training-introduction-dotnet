@@ -1,7 +1,7 @@
 using System;
 using Application.EventSourcing;
 
-namespace Application.Domain.Events
+namespace Application.Domain.WriteModel.Events
 {
     public class Scheduled : Event
     {

@@ -1,5 +1,3 @@
-using System;
-using Application.Domain.Commands;
 using Scheduling.Domain.Infrastructure;
 using Scheduling.Domain.Infrastructure.Commands;
 

@@ -1,7 +1,6 @@
 using System;
-using Application.EventSourcing;
 
-namespace Application.Domain.Exceptions
+namespace Application.Domain.WriteModel.Exceptions
 {
     public class SlotNotScheduledException : Exception
     {

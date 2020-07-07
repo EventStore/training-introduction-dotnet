@@ -1,6 +1,6 @@
 using System;
 
-namespace Application.Domain.Exceptions
+namespace Application.Domain.WriteModel.Exceptions
 {
     public class SlotAlreadyBookedException : Exception
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Application.Domain.Events;
+using Application.Application;
 using Application.Domain.ReadModel;
-using Application.Domain.Service.Projections;
+using Application.Domain.WriteModel.Events;
 using Application.Infrastructure.InMemory;
 using Application.Infrastructure.Projections;
 using Application.Test.Test;
@@ -19,6 +19,7 @@ namespace Application.Test.Domain.ReadModel
         protected override Projection GetProjection()
         {
             _repository = new InMemoryAvailableSlotsRepository();
+            _repository.Clear();
             return new AvailableSlotsProjection(_repository);
         }
 

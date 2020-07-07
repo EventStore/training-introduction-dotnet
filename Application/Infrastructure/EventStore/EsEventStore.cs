@@ -23,31 +23,34 @@ namespace Application.Infrastructure.ES
                 return Task.CompletedTask;
             }
 
-            var preparedEvents = events.Select(e => e.Serialize(
-                Uuid.NewUuid()
-            )).ToList();
+            var preparedEvents = events.Select(e => e.Serialize()).ToList();
 
             if (version == -1)
             {
-                return _client.AppendToStreamAsync(streamName, StreamState.NoStream, preparedEvents);
+                return _client.AppendToStreamAsync(ToStreamName(streamName), StreamState.NoStream, preparedEvents);
             }
 
-            return _client.AppendToStreamAsync(streamName, Convert.ToUInt64(version), preparedEvents);
+            return _client.AppendToStreamAsync(ToStreamName(streamName), Convert.ToUInt64(version), preparedEvents);
         }
 
-        public async Task<IEnumerable<object>> LoadEvents(string stream)
+        public async Task<IEnumerable<object>> LoadEvents(string streamName)
         {
             var response = _client
-                .ReadStreamAsync(Direction.Forwards, stream, StreamPosition.Start);
+                .ReadStreamAsync(Direction.Forwards, ToStreamName(streamName), StreamPosition.Start);
 
-            if (await response.ReadState == ReadState.StreamNotFound)
+            var readState = await response.ReadState;
+            if (readState == ReadState.StreamNotFound)
             {
                 return new List<object>();
             }
 
-            return await response
+            var events = (await response.ToListAsync())
                 .Select(e => e.Deserialize())
-                .ToListAsync();
+                .ToList();
+            return events;
         }
+
+        private string ToStreamName(string streamName) =>
+            streamName.Replace(" ", "");
     }
 }

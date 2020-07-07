@@ -1,9 +1,9 @@
 using System;
-using Application.Domain.Events;
-using Application.Domain.Exceptions;
+using Application.Domain.WriteModel.Events;
+using Application.Domain.WriteModel.Exceptions;
 using Application.Infrastructure;
 
-namespace Application.Domain
+namespace Application.Domain.WriteModel
 {
     public class SlotAggregate : AggregateRoot
     {
@@ -18,13 +18,6 @@ namespace Application.Domain
             Register<Scheduled>(When);
         }
 
-        private void When(Scheduled scheduled)
-        {
-            _isScheduled = true;
-            _startTime = scheduled.StartTime;
-            Id = scheduled.SlotId;
-        }
-
         public void Schedule(string id, DateTime startTime, TimeSpan duration)
         {
             if (_isScheduled)
@@ -33,11 +26,6 @@ namespace Application.Domain
             }
 
             Raise(new Scheduled(id, startTime, duration));
-        }
-
-        private void When(Cancelled obj)
-        {
-            _isBooked = false;
         }
 
         public void Cancel(string reason, DateTime cancellationTime)
@@ -63,12 +51,6 @@ namespace Application.Domain
             return cancellationTime.CompareTo(_startTime) > 0;
         }
 
-
-        private void When(Booked booked)
-        {
-            _isBooked = true;
-        }
-
         public void Book(string patientId)
         {
             if (!_isScheduled)
@@ -82,6 +64,23 @@ namespace Application.Domain
             }
 
             Raise(new Booked(Id, patientId));
+        }
+
+        private void When(Cancelled obj)
+        {
+            _isBooked = false;
+        }
+
+        private void When(Booked booked)
+        {
+            _isBooked = true;
+        }
+
+        private void When(Scheduled scheduled)
+        {
+            _isScheduled = true;
+            _startTime = scheduled.StartTime;
+            Id = scheduled.SlotId;
         }
     }
 }

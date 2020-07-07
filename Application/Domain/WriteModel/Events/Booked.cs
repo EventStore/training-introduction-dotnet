@@ -1,11 +1,12 @@
 using System;
 using Application.EventSourcing;
 
-namespace Application.Domain.Events
+namespace Application.Domain.WriteModel.Events
 {
     public class Booked : Event
     {
         public string SlotId { get; }
+
         public string PatientId { get; }
 
         public Booked(string slotId, string patientId)
