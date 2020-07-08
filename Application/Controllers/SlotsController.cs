@@ -39,7 +39,7 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        [Route("my-slots/patientId")]
+        [Route("my-slots/{patientId}")]
         public List<PatientSlot> MySlots(string patientId)
         {
             return _patientSlotRepository.getPatientSlots(patientId);

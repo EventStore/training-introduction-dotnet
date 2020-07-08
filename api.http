@@ -1,0 +1,32 @@
+### Schedule a day
+POST https://localhost:5001/slots/schedule
+Content-Type: application/json
+
+{
+  "slotId": "7cb4f26das",
+  "startDateTime": "2020-08-01 14:30",
+  "duration": "00:10:00"
+}
+
+### Get slots available on a date
+GET https://localhost:5001/slots/available/2020-08-01
+
+### Book a slot
+POST https://localhost:5001/slots/7cb4f26das/book
+Content-Type: application/json
+
+{
+  "patientId": "John"
+}
+
+### Get patient's slot
+GET https://localhost:5001/slots/my-slots/John
+Content-Type: application/json
+
+### Cancel slot booking
+POST https://localhost:5001/slots/7cb4f26das/cancel
+Content-Type: application/json
+
+{
+  "reason": "No longer needed"
+}
