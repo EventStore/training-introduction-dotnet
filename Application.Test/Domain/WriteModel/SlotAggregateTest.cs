@@ -22,6 +22,7 @@ namespace Application.Test
             RegisterHandlers<Handlers>();
         }
 
+        // Test 1
         [Fact]
         public async Task should_be_scheduled()
         {
@@ -33,6 +34,7 @@ namespace Application.Test
             });
         }
 
+        // Test 2
         [Fact]
         public async Task  should_not_be_double_scheduled()
         {
@@ -41,8 +43,21 @@ namespace Application.Test
             Then<SlotAlreadyScheduledException>();
         }
 
+        // Test 4
         // [Fact]
-        // public async Task  should_be_booked()
+        // public async Task can_be_cancelled()
+        // {
+        //     Given(new Scheduled(_slotId, _now, _tenMinutes), new Booked(_slotId, _patientId));
+        //     await When(new Cancel(_slotId, "No longer needed", _now));
+        //     Then(events =>
+        //     {
+        //         Assert.Equal(new Cancelled(_slotId, "No longer needed"), events.First());
+        //     });
+        // }
+        //
+        // Test 3
+        // [Fact]
+        // public async Task should_be_booked()
         // {
         //     Given(new Scheduled(_slotId, _now, _tenMinutes));
         //     await When(new Book(_slotId, _patientId));
@@ -70,17 +85,6 @@ namespace Application.Test
         // }
         //
         // [Fact]
-        // public async Task can_be_cancelled()
-        // {
-        //     Given(new Scheduled(_slotId, _now, _tenMinutes), new Booked(_slotId, _patientId));
-        //     await When(new Cancel(_slotId, "No longer needed", _now));
-        //     Then(events =>
-        //     {
-        //         Assert.Equal(new Cancelled(_slotId, "No longer needed"), events.First());
-        //     });
-        // }
-        //
-        // [Fact]
         // public async Task  cancelled_slot_can_be_booked_again()
         // {
         //
@@ -92,6 +96,7 @@ namespace Application.Test
         //     });
         // }
         //
+        // Test: 5
         // [Fact]
         // public async Task  cant_be_cancelled_after_start_time()
         // {
