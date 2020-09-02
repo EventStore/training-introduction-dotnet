@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Application.EventSourcing;
 
@@ -14,7 +15,19 @@ namespace Scheduling.Domain.Infrastructure.Commands
         {
             var handler = _map.Get(command);
 
+            if (handler == null)
+            {
+                throw new HandlerNotFoundException(command);
+            }
             return handler(command);
+        }
+    }
+
+    public class HandlerNotFoundException : Exception
+    {
+        public HandlerNotFoundException(object type) :
+            base($"No handler found for {type.GetType().Name}")
+        {
         }
     }
 }

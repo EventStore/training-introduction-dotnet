@@ -14,11 +14,23 @@ namespace Scheduling.Domain.Infrastructure.Commands
         {
             foreach (var handler in commandHandlers.SelectMany(h => h.Handlers))
             {
-                _handlers.Add(handler.Key, handler.Value);
+                if (!_handlers.TryAdd(handler.Key, handler.Value))
+                {
+
+                    throw new DuplicateCommandHandlerException(handler.Key);
+                }
             }
         }
 
         public Func<object, Task> Get(object command) =>
             _handlers[command.GetType().Name];
+    }
+
+    public class DuplicateCommandHandlerException : Exception
+    {
+        public DuplicateCommandHandlerException(string type) :
+            base($"A handler has already been registered for {type}")
+        {
+        }
     }
 }
