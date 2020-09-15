@@ -2,11 +2,11 @@ using System.Threading.Tasks;
 
 namespace Application.Infrastructure.Projections
 {
-    public class DbProjector: ISubscription
+    public class Projector: ISubscription
     {
         readonly Projection _projection;
 
-        public DbProjector(
+        public Projector(
             Projection projection
         )
         {

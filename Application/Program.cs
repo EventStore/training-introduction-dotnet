@@ -28,8 +28,8 @@ namespace Application
                 client,
                 "Slots",
                 StreamName.AllStream,
-                new DbProjector(new AvailableSlotsProjection(availableSlotsRepository)),
-                new DbProjector(new PatientSlotsProjection(patientSlotsRepository)));
+                new Projector(new AvailableSlotsProjection(availableSlotsRepository)),
+                new Projector(new PatientSlotsProjection(patientSlotsRepository)));
 
             subManager.Start();
 
