@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Scheduling.Domain.Infrastructure.Commands;
 
-namespace Scheduling.Domain.Infrastructure.Commands
+namespace Application.Infrastructure.Commands
 {
     public class CommandHandlerMap
     {
@@ -16,7 +17,6 @@ namespace Scheduling.Domain.Infrastructure.Commands
             {
                 if (!_handlers.TryAdd(handler.Key, handler.Value))
                 {
-
                     throw new DuplicateCommandHandlerException(handler.Key);
                 }
             }

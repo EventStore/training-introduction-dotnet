@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Domain.WriteModel.Commands;
 using Application.Infrastructure;
+using Application.Infrastructure.Commands;
 using Scheduling.Domain.Infrastructure;
 using Scheduling.Domain.Infrastructure.Commands;
 using Xunit;

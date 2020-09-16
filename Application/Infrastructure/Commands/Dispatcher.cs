@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Application.EventSourcing;
+using Application.Infrastructure.Commands;
 
 namespace Scheduling.Domain.Infrastructure.Commands
 {
