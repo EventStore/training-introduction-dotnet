@@ -9,7 +9,17 @@ namespace Application.Domain.WriteModel
     {
         public SlotAggregate()
         {
+            Register<Scheduled>(When);
+        }
 
+        public void Schedule(string id, DateTime startTime, TimeSpan duration)
+        {
+            Raise(null);
+        }
+
+        private void When(Scheduled scheduled)
+        {
+            Id = scheduled.SlotId;
         }
     }
 }
