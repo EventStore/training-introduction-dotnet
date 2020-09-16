@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using Application.Domain.ReadModel;
 using Application.Domain.WriteModel.Commands;
+using Application.Infrastructure.Commands;
 using Application.Infrastructure.ES;
 using Application.Infrastructure.InMemory;
 using EventStore.Client;
@@ -64,17 +65,9 @@ namespace Application
             {
                 ConnectivitySettings =
                 {
-                    Address = new Uri("https://localhost:2113"),
+                    Address = new Uri("http://localhost:2113"),
                 },
-                DefaultCredentials = new UserCredentials("admin", "changeit"),
-                CreateHttpMessageHandler = () =>
-                    new SocketsHttpHandler
-                    {
-                        SslOptions =
-                        {
-                            RemoteCertificateValidationCallback = delegate { return true; }
-                        }
-                    }
+                DefaultCredentials = new UserCredentials("admin", "changeit")
             });
         }
     }
