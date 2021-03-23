@@ -19,7 +19,14 @@ namespace Application.Infrastructure
 
         protected void Raise(object e)
         {
-            _handlers[e.GetType()](e);
+            _handlers.TryGetValue(e.GetType(), out var handler);
+
+            if (handler == null)
+            {
+                throw new NoHandlerRegisteredException(e.GetType());
+            }
+
+            handler(e);
             _changes.Add(e);
         }
 
@@ -35,5 +42,12 @@ namespace Application.Infrastructure
         }
 
         public void ClearChanges() => _changes.Clear();
+    }
+
+    public class NoHandlerRegisteredException : Exception
+    {
+        public NoHandlerRegisteredException(Type type) : base($"No handler registered for {type.FullName}")
+        {
+        }
     }
 }
