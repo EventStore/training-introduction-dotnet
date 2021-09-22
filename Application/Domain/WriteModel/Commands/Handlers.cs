@@ -9,8 +9,20 @@ namespace Application.Domain.WriteModel.Commands
         {
             Register<Schedule>(async s =>
             {
-
+                var aggregate = await aggregateStore.Load<SlotAggregate>(s.Id);
+                aggregate.Schedule(s.Id, s.StartTime, s.Duration);
+                await aggregateStore.Save(aggregate);
             });
+
+            // Register<Book>(async s =>
+            // {
+            //
+            // });
+            //
+            // Register<Cancel>(async s =>
+            // {
+            //
+            // });
         }
     }
 }
