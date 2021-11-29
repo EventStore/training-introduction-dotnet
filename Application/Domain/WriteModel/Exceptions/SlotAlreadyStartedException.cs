@@ -1,8 +1,7 @@
 using System;
 
-namespace Application.Domain.WriteModel.Exceptions
+namespace Application.Domain.WriteModel.Exceptions;
+
+public class SlotAlreadyStartedException : Exception
 {
-    public class SlotAlreadyStartedException : Exception
-    {
-    }
 }

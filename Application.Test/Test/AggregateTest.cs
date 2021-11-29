@@ -9,63 +9,62 @@ using Scheduling.Domain.Infrastructure;
 using Scheduling.Domain.Infrastructure.Commands;
 using Xunit;
 
-namespace Scheduling.Test
+namespace Scheduling.Test;
+
+public class AggregateTest<TAggregate> where TAggregate : AggregateRoot
 {
-    public class AggregateTest<TAggregate> where TAggregate : AggregateRoot
+    private Dispatcher _dispatcher;
+
+    private IAggregateStore _repository;
+
+    private AggregateRoot _aggregate;
+
+    private Exception _exception;
+
+    public AggregateTest()
     {
-        private Dispatcher _dispatcher;
+        _aggregate = (AggregateRoot) Activator.CreateInstance(typeof(TAggregate));
+        _repository = new FakeAggregateStore(_aggregate);
+    }
 
-        private IAggregateStore _repository;
+    public void RegisterHandlers<TCommandHandler>()
+        where TCommandHandler : CommandHandler
+    {
+        var commandHandler = (CommandHandler) Activator.CreateInstance(typeof(TCommandHandler), _repository);
+        var commandHandlerMap = new CommandHandlerMap(commandHandler);
 
-        private AggregateRoot _aggregate;
+        _dispatcher = new Dispatcher(commandHandlerMap);
+    }
 
-        private Exception _exception;
+    protected void Given(params object[] events)
+    {
+        _exception = null;
+        _aggregate.Load(events);
+    }
 
-        public AggregateTest()
+    protected async Task When(object command)
+    {
+        try
         {
-            _aggregate = (AggregateRoot) Activator.CreateInstance(typeof(TAggregate));
-            _repository = new FakeAggregateStore(_aggregate);
+            _aggregate.ClearChanges();
+            await _dispatcher.Dispatch(command);
         }
-
-        public void RegisterHandlers<TCommandHandler>()
-            where TCommandHandler : CommandHandler
+        catch (Exception e)
         {
-            var commandHandler = (CommandHandler) Activator.CreateInstance(typeof(TCommandHandler), _repository);
-            var commandHandlerMap = new CommandHandlerMap(commandHandler);
-
-            _dispatcher = new Dispatcher(commandHandlerMap);
+            _exception = e;
         }
+    }
 
-        protected void Given(params object[] events)
-        {
-            _exception = null;
-            _aggregate.Load(events);
-        }
+    protected void Then(Action<List<object>> events)
+    {
+        if (_exception != null)
+            throw _exception;
 
-        protected async Task When(object command)
-        {
-            try
-            {
-                _aggregate.ClearChanges();
-                await _dispatcher.Dispatch(command);
-            }
-            catch (Exception e)
-            {
-                _exception = e;
-            }
-        }
+        events(_aggregate.GetChanges().ToList());
+    }
 
-        protected void Then(Action<List<object>> events)
-        {
-            if (_exception != null)
-                throw _exception;
-
-            events(_aggregate.GetChanges().ToList());
-        }
-
-        protected void Then<TException>() where TException : Exception
-        {
-           Assert.Equal(typeof(TException), _exception.GetType());
-        }
+    protected void Then<TException>() where TException : Exception
+    {
+        Assert.Equal(typeof(TException), _exception.GetType());
     }
 }

@@ -1,6 +1,5 @@
-namespace Application.EventSourcing
+namespace Application.EventSourcing;
+
+public abstract class Event
 {
-    public abstract class Event
-    {
-    }
 }

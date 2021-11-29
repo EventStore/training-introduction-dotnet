@@ -1,8 +1,7 @@
 using System;
 
-namespace Application.Domain.WriteModel.Exceptions
+namespace Application.Domain.WriteModel.Exceptions;
+
+public class SlotAlreadyScheduledException : Exception
 {
-    public class SlotAlreadyScheduledException : Exception
-    {
-    }
 }

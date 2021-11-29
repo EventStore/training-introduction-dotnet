@@ -1,6 +1,5 @@
-namespace Application.EventSourcing
+namespace Application.EventSourcing;
+
+public class Command
 {
-    public class Command
-    {
-    }
 }

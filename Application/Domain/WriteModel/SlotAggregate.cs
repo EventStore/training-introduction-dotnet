@@ -3,84 +3,83 @@ using Application.Domain.WriteModel.Events;
 using Application.Domain.WriteModel.Exceptions;
 using Application.Infrastructure;
 
-namespace Application.Domain.WriteModel
+namespace Application.Domain.WriteModel;
+
+public class SlotAggregate : AggregateRoot
 {
-    public class SlotAggregate : AggregateRoot
+    private bool _isBooked;
+    private bool _isScheduled;
+    private DateTime _startTime;
+
+    public SlotAggregate()
     {
-        private bool _isBooked;
-        private bool _isScheduled;
-        private DateTime _startTime;
+        Register<Booked>(When);
+        Register<Cancelled>(When);
+        Register<Scheduled>(When);
+    }
 
-        public SlotAggregate()
+    public void Schedule(string id, DateTime startTime, TimeSpan duration)
+    {
+        if (_isScheduled)
         {
-            Register<Booked>(When);
-            Register<Cancelled>(When);
-            Register<Scheduled>(When);
+            throw new SlotAlreadyScheduledException();
         }
 
-        public void Schedule(string id, DateTime startTime, TimeSpan duration)
-        {
-            if (_isScheduled)
-            {
-                throw new SlotAlreadyScheduledException();
-            }
+        Raise(new Scheduled(id, startTime, duration));
+    }
 
-            Raise(new Scheduled(id, startTime, duration));
+    public void Cancel(string reason, DateTime cancellationTime)
+    {
+        if (!_isBooked)
+        {
+            throw new SlotNotBookedException();
         }
 
-        public void Cancel(string reason, DateTime cancellationTime)
+        if (IsStarted(cancellationTime))
         {
-            if (!_isBooked)
-            {
-                throw new SlotNotBookedException();
-            }
-
-            if (IsStarted(cancellationTime))
-            {
-                throw new SlotAlreadyStartedException();
-            }
-
-            if (_isBooked && !IsStarted(cancellationTime))
-            {
-                Raise(new Cancelled(Id, reason));
-            }
+            throw new SlotAlreadyStartedException();
         }
 
-        private bool IsStarted(DateTime cancellationTime)
+        if (_isBooked && !IsStarted(cancellationTime))
         {
-            return cancellationTime.CompareTo(_startTime) > 0;
+            Raise(new Cancelled(Id, reason));
+        }
+    }
+
+    private bool IsStarted(DateTime cancellationTime)
+    {
+        return cancellationTime.CompareTo(_startTime) > 0;
+    }
+
+    public void Book(string patientId)
+    {
+        if (!_isScheduled)
+        {
+            throw new SlotNotScheduledException();
         }
 
-        public void Book(string patientId)
+        if (_isBooked)
         {
-            if (!_isScheduled)
-            {
-                throw new SlotNotScheduledException();
-            }
-
-            if (_isBooked)
-            {
-                throw new SlotAlreadyBookedException();
-            }
-
-            Raise(new Booked(Id, patientId));
+            throw new SlotAlreadyBookedException();
         }
 
-        private void When(Cancelled obj)
-        {
-            _isBooked = false;
-        }
+        Raise(new Booked(Id, patientId));
+    }
 
-        private void When(Booked booked)
-        {
-            _isBooked = true;
-        }
+    private void When(Cancelled obj)
+    {
+        _isBooked = false;
+    }
 
-        private void When(Scheduled scheduled)
-        {
-            _isScheduled = true;
-            _startTime = scheduled.StartTime;
-            Id = scheduled.SlotId;
-        }
+    private void When(Booked booked)
+    {
+        _isBooked = true;
+    }
+
+    private void When(Scheduled scheduled)
+    {
+        _isScheduled = true;
+        _startTime = scheduled.StartTime;
+        Id = scheduled.SlotId;
     }
 }

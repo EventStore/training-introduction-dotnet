@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Scheduling.Domain.Infrastructure
-{
-    public interface IEventStore
-    {
-        Task AppendEvents(
-            string streamName,
-            long version,
-            params object[] events
-        );
+namespace Scheduling.Domain.Infrastructure;
 
-        Task<IEnumerable<object>> LoadEvents(string streamName);
-    }
+public interface IEventStore
+{
+    Task AppendEvents(
+        string streamName,
+        long version,
+        params object[] events
+    );
+
+    Task<IEnumerable<object>> LoadEvents(string streamName);
 }
