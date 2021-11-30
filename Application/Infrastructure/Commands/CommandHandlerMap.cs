@@ -8,8 +8,7 @@ namespace Application.Infrastructure.Commands;
 
 public class CommandHandlerMap
 {
-    private readonly Dictionary<string, Func<object, Task>> _handlers =
-        new Dictionary<string, Func<object, Task>>();
+    private readonly Dictionary<string, Func<object, Task>> _handlers = new();
 
     public CommandHandlerMap(params CommandHandler[] commandHandlers)
     {

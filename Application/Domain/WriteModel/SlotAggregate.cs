@@ -66,7 +66,7 @@ public class SlotAggregate : AggregateRoot
         Raise(new Booked(Id, patientId));
     }
 
-    private void When(Cancelled obj)
+    private void When(Cancelled _)
     {
         _isBooked = false;
     }
@@ -78,8 +78,10 @@ public class SlotAggregate : AggregateRoot
 
     private void When(Scheduled scheduled)
     {
+        var (slotId, startTime, _) = scheduled;
+        
         _isScheduled = true;
-        _startTime = scheduled.StartTime;
-        Id = scheduled.SlotId;
+        _startTime = startTime;
+        Id = slotId;
     }
 }
