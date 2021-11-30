@@ -4,5 +4,5 @@ namespace Application.EventSourcing;
 
 public abstract class AggregateState
 {
-    public abstract void Apply(List<Event> events);
+    public abstract void Apply(List<IEvent> events);
 }

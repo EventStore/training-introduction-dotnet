@@ -11,7 +11,7 @@ public abstract class ProjectionTest
 
     private Projection _projection;
 
-    protected void Given(params Event[] events)
+    protected void Given(params IEvent[] events)
     {
         _projection = GetProjection();
         events.ToList().ForEach(e => _projection.Handle(e.GetType(), e));

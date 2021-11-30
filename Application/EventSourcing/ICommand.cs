@@ -1,5 +1,5 @@
 namespace Application.EventSourcing;
 
-public class Command
+public interface ICommand
 {
 }

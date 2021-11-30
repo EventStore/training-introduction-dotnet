@@ -35,7 +35,7 @@ public class SlotsController : ControllerBase
     [Route("available/{date}")]
     public List<AvailableSlot> AvailableSlots(DateTime date)
     {
-        return _availableSlotsRepository.getSlotsAvailableOn(date);
+        return _availableSlotsRepository.GetSlotsAvailableOn(date);
     }
 
     [HttpGet]

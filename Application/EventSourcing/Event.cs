@@ -1,5 +1,5 @@
 namespace Application.EventSourcing;
 
-public abstract class Event
+public interface IEvent
 {
 }
