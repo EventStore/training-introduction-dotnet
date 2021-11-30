@@ -6,7 +6,7 @@ namespace Application.Infrastructure.ES;
 
 public static class EsEventSerde
 {
-    public static object Deserialize(this ResolvedEvent resolvedEvent)
+    public static object? Deserialize(this ResolvedEvent resolvedEvent)
     {
         return JsonConvert
             .DeserializeObject(Encoding.UTF8.GetString(resolvedEvent.Event.Data.ToArray()),

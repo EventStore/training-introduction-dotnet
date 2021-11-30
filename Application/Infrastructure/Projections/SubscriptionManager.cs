@@ -15,8 +15,8 @@ namespace Application.Infrastructure.Projections
             readonly StreamName _streamName;
             readonly EventStoreClient _client;
             readonly ISubscription[] _subscriptions;
-            StreamSubscription _subscription;
-            bool _isAllStream;
+            StreamSubscription? _subscription;
+            readonly bool _isAllStream;
 
             public SubscriptionManager(
                 EventStoreClient client,
@@ -35,8 +35,7 @@ namespace Application.Infrastructure.Projections
             public async Task Start()
             {
                 _subscription = _isAllStream
-                    ? (StreamSubscription)
-                    await _client.SubscribeToAllAsync(
+                    ? await _client.SubscribeToAllAsync(
                         Position.Start,
                         EventAppeared)
                     : await _client.SubscribeToStreamAsync(
@@ -50,7 +49,7 @@ namespace Application.Infrastructure.Projections
             {
                 if (resolvedEvent.Event.EventType.StartsWith("$")) return;
 
-                var @event = resolvedEvent.Deserialize();
+                var @event = resolvedEvent.Deserialize()!;
                 await Task.WhenAll(
                     _subscriptions.Select(x => x.Project(@event))
                 );

@@ -17,17 +17,16 @@ public class PatientSlot
         Status = status;
     }
 
-    protected bool Equals(PatientSlot other)
+    private bool Equals(PatientSlot other)
     {
         return ScheduledId.Equals(other.ScheduledId) && StartTime.Equals(other.StartTime) && Duration.Equals(other.Duration) && Status == other.Status;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((PatientSlot) obj);
+        return obj.GetType() == GetType() && Equals((PatientSlot) obj);
     }
 
     public override int GetHashCode()
