@@ -8,6 +8,6 @@ public interface IAvailableSlotsRepository
     void Add(AvailableSlot slot);
     void MarkAsUnavailable(string slotId);
     void MarkAsAvailable(string slotId);
-    List<AvailableSlot> getSlotsAvailableOn(DateTime date);
+    List<AvailableSlot> GetSlotsAvailableOn(DateTime date);
     void Clear();
 }

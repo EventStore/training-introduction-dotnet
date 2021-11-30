@@ -31,7 +31,7 @@ namespace Application.Test.Domain.ReadModel
             Given(scheduled);
             Then(
                 new List<AvailableSlot> {new AvailableSlot(scheduled.SlotId, scheduled.StartTime, scheduled.Duration)},
-                _repository.getSlotsAvailableOn(_now.Date)
+                _repository.GetSlotsAvailableOn(_now.Date)
             );
         }
 
@@ -42,7 +42,7 @@ namespace Application.Test.Domain.ReadModel
             var booked = new Booked(scheduled.SlotId, "patient-123");
 
             Given(scheduled, booked);
-            Then(new List<AvailableSlot>(), _repository.getSlotsAvailableOn(_now.Date));
+            Then(new List<AvailableSlot>(), _repository.GetSlotsAvailableOn(_now.Date));
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Application.Test.Domain.ReadModel
             Given(scheduled, booked, cancelled);
             Then(
                 new List<AvailableSlot> {new AvailableSlot(scheduled.SlotId, scheduled.StartTime, scheduled.Duration)},
-                _repository.getSlotsAvailableOn(_now.Date)
+                _repository.GetSlotsAvailableOn(_now.Date)
             );
         }
     }

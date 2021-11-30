@@ -30,7 +30,7 @@ namespace Application.Test.Domain.ReadModel
             Given();
             Then(
                 new List<PatientSlot>(),
-                _repository.getPatientSlots(_patientId)
+                _repository.GetPatientSlots(_patientId)
             );
         }
 
@@ -41,7 +41,7 @@ namespace Application.Test.Domain.ReadModel
             Given(scheduled);
             Then(
                 new List<PatientSlot>(),
-                _repository.getPatientSlots(_patientId)
+                _repository.GetPatientSlots(_patientId)
             );
         }
 
@@ -53,7 +53,7 @@ namespace Application.Test.Domain.ReadModel
             Given(scheduled, booked);
             Then(
                 new List<PatientSlot> {new PatientSlot(scheduled.SlotId, scheduled.StartTime, scheduled.Duration)},
-                _repository.getPatientSlots(_patientId)
+                _repository.GetPatientSlots(_patientId)
             );
         }
 
@@ -67,7 +67,7 @@ namespace Application.Test.Domain.ReadModel
             Given(scheduled, booked, cancelled);
             Then(
                 new List<PatientSlot> {new PatientSlot(scheduled.SlotId, scheduled.StartTime, scheduled.Duration, "cancelled")},
-                _repository.getPatientSlots(_patientId)
+                _repository.GetPatientSlots(_patientId)
             );
         }
 
@@ -84,11 +84,11 @@ namespace Application.Test.Domain.ReadModel
             Given(scheduled, booked, cancelled, booked2);
             Then(
                 new List<PatientSlot> {new PatientSlot(scheduled.SlotId, scheduled.StartTime, scheduled.Duration, "cancelled")},
-                _repository.getPatientSlots(_patientId)
+                _repository.GetPatientSlots(_patientId)
             );
             Then(
                 new List<PatientSlot> {new PatientSlot(scheduled.SlotId, scheduled.StartTime, scheduled.Duration, "booked")},
-                _repository.getPatientSlots(patientId2)
+                _repository.GetPatientSlots(patientId2)
             );
         }
     }
