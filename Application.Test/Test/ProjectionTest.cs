@@ -9,7 +9,7 @@ namespace Application.Test.Test
     {
         protected abstract Projection GetProjection();
 
-        private Projection _projection;
+        private Projection _projection = default!;
 
         protected void Given(params IEvent[] events)
         {

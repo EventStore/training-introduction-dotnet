@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Domain.WriteModel.Commands;
 using Application.Infrastructure;
 using Application.Infrastructure.Commands;
 using Scheduling.Domain.Infrastructure;
@@ -13,24 +12,24 @@ namespace Scheduling.Test;
 
 public class AggregateTest<TAggregate> where TAggregate : AggregateRoot
 {
-    private Dispatcher _dispatcher;
+    private Dispatcher _dispatcher = default!;
 
     private IAggregateStore _repository;
 
     private AggregateRoot _aggregate;
 
-    private Exception _exception;
+    private Exception? _exception;
 
     public AggregateTest()
     {
-        _aggregate = (AggregateRoot) Activator.CreateInstance(typeof(TAggregate));
+        _aggregate = (AggregateRoot) Activator.CreateInstance(typeof(TAggregate))!;
         _repository = new FakeAggregateStore(_aggregate);
     }
 
     public void RegisterHandlers<TCommandHandler>()
         where TCommandHandler : CommandHandler
     {
-        var commandHandler = (CommandHandler) Activator.CreateInstance(typeof(TCommandHandler), _repository);
+        var commandHandler = (CommandHandler) Activator.CreateInstance(typeof(TCommandHandler), _repository)!;
         var commandHandlerMap = new CommandHandlerMap(commandHandler);
 
         _dispatcher = new Dispatcher(commandHandlerMap);
@@ -65,6 +64,6 @@ public class AggregateTest<TAggregate> where TAggregate : AggregateRoot
 
     protected void Then<TException>() where TException : Exception
     {
-        Assert.Equal(typeof(TException), _exception.GetType());
+        Assert.Equal(typeof(TException), _exception!.GetType());
     }
 }

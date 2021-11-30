@@ -12,7 +12,7 @@ namespace Application.Test.Domain.ReadModel
 {
     public class PatientSlotsProjectionTest : ProjectionTest
     {
-        private IPatientSlotsRepository _repository;
+        private IPatientSlotsRepository _repository = default!;
         private DateTime _now = DateTime.UtcNow;
         private TimeSpan _tenMinutes = TimeSpan.FromMinutes(10);
         private String _patientId = "patient-123";

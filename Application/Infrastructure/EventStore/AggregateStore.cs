@@ -7,7 +7,7 @@ namespace Application.Infrastructure.ES;
 
 public class EsAggregateStore : IAggregateStore
 {
-    readonly IEventStore _store;
+    private readonly IEventStore _store;
 
     private readonly int _threshold;
 
@@ -35,7 +35,7 @@ public class EsAggregateStore : IAggregateStore
             throw new ArgumentNullException(nameof(aggregateId));
 
         var streamName = GetStreamName<T>(aggregateId);
-        var aggregate = (T) Activator.CreateInstance(typeof(T), true);
+        var aggregate = (T) Activator.CreateInstance(typeof(T), true)!;
 
         aggregate.Id = aggregateId;
 

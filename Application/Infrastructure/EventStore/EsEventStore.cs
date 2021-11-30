@@ -44,10 +44,9 @@ public class EsEventStore : IEventStore
             return new List<object>();
         }
 
-        var events = (await response.ToListAsync())
-            .Select(e => e.Deserialize())
-            .ToList();
-        return events;
+        return await response
+            .Select(e => e.Deserialize()!)
+            .ToListAsync();
     }
 
     private string ToStreamName(string streamName) =>

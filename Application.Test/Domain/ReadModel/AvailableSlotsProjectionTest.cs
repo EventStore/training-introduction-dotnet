@@ -12,7 +12,7 @@ namespace Application.Test.Domain.ReadModel
 {
     public class AvailableSlotsProjectionTest : ProjectionTest
     {
-        private static InMemoryAvailableSlotsRepository _repository;
+        private static InMemoryAvailableSlotsRepository _repository = default!;
         private DateTime _now = DateTime.UtcNow;
         private TimeSpan _tenMinutes = TimeSpan.FromMinutes(10);
 
