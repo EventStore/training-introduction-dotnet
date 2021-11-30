@@ -3,23 +3,22 @@ using Application.Domain.WriteModel.Events;
 using Application.Domain.WriteModel.Exceptions;
 using Application.Infrastructure;
 
-namespace Application.Domain.WriteModel
+namespace Application.Domain.WriteModel;
+
+public class SlotAggregate : AggregateRoot
 {
-    public class SlotAggregate : AggregateRoot
+    public SlotAggregate()
     {
-        public SlotAggregate()
-        {
-            Register<Scheduled>(When);
-        }
+        Register<Scheduled>(When);
+    }
 
-        public void Schedule(string id, DateTime startTime, TimeSpan duration)
-        {
-            Raise(null);
-        }
+    public void Schedule(string id, DateTime startTime, TimeSpan duration)
+    {
+        Raise(null);
+    }
 
-        private void When(Scheduled scheduled)
-        {
-            Id = scheduled.SlotId;
-        }
+    private void When(Scheduled scheduled)
+    {
+        Id = scheduled.SlotId;
     }
 }

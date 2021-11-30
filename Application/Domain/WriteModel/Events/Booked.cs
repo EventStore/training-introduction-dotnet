@@ -1,10 +1,8 @@
 using System;
 using Application.EventSourcing;
 
-namespace Application.Domain.WriteModel.Events
-{
+namespace Application.Domain.WriteModel.Events;
 
-}
 
 /*
 protected bool Equals(Booked other)
