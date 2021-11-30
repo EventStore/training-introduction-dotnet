@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Domain;
 using Application.Domain.ReadModel;
 using Application.Domain.WriteModel.Commands;
-using Application.Infrastructure.ES;
-using EventStore.Client;
 using Microsoft.AspNetCore.Mvc;
 using Scheduling.Domain.Infrastructure.Commands;
 
@@ -69,19 +66,16 @@ public class SlotsController : ControllerBase
     }
 }
 
-public class ScheduleRequest
-{
-    public string SlotId { get; set; }
-    public DateTime StartDateTime { get; set; }
-    public TimeSpan Duration { get; set; }
-}
+public record ScheduleRequest(
+    string SlotId,
+    DateTime StartDateTime,
+    TimeSpan Duration
+);
 
-public class BookRequest
-{
-    public string PatientId { get; set; }
-}
+public record BookRequest(
+    string PatientId
+);
 
-public class CancelRequest
-{
-    public string Reason { get; set; }
-}
+public record CancelRequest(
+    string Reason
+);

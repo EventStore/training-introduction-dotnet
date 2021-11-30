@@ -7,11 +7,11 @@ namespace Application.Infrastructure.Projections;
 
 public class Projection
 {
-    readonly List<EventHandler> _handlers = new List<EventHandler>();
+    readonly List<EventHandler> _handlers = new();
 
     protected void When<T>(Func<T, Task> when)
     {
-        _handlers.Add(new EventHandler { EventType = typeof(T), Handler = async e => await when((T)e) });
+        _handlers.Add(new EventHandler(typeof(T), async e => await when((T)e)));
     }
 
     public async Task Handle(Type eventType, object e)
@@ -33,8 +33,14 @@ public class Projection
 
     public class EventHandler
     {
-        public Type EventType { get; set; }
-
-        public Func<object, Task> Handler { get; set; }
+        public Type EventType { get; }
+        
+        public Func<object, Task> Handler { get; }
+        
+        public EventHandler(Type eventType, Func<object, Task> handler)
+        {
+            EventType = eventType;
+            Handler = handler;
+        }
     }
 }

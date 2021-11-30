@@ -21,7 +21,7 @@ public class CommandHandlerMap
         }
     }
 
-    public Func<object, Task> Get(object command) =>
+    public Func<object, Task>? Get(object command) =>
         _handlers.ContainsKey(command.GetType().Name) ? _handlers[command.GetType().Name] : null;
 }
 
