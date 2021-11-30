@@ -13,41 +13,40 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Application
+namespace Application;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var client = GetEventStoreClient();
+
+        var availableSlotsRepository = new InMemoryAvailableSlotsRepository();
+
+        var subManager = new SubscriptionManager(
+            client,
+            "Slots",
+            StreamName.AllStream,
+            new Projector(new AvailableSlotsProjection(availableSlotsRepository))
+        );
+        subManager.Start();
+
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+
+    private static EventStoreClient GetEventStoreClient()
+    {
+        return new EventStoreClient(new EventStoreClientSettings
         {
-            var client = GetEventStoreClient();
-
-            var availableSlotsRepository = new InMemoryAvailableSlotsRepository();
-
-            var subManager = new SubscriptionManager(
-                client,
-                "Slots",
-                StreamName.AllStream,
-                new Projector(new AvailableSlotsProjection(availableSlotsRepository))
-                );
-            subManager.Start();
-
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-
-        private static EventStoreClient GetEventStoreClient()
-        {
-            return new EventStoreClient(new EventStoreClientSettings
+            ConnectivitySettings =
             {
-                ConnectivitySettings =
-                {
-                    Address = new Uri("http://localhost:2113"),
-                },
-                DefaultCredentials = new UserCredentials("admin", "changeit")
-            });
-        }
+                Address = new Uri("http://localhost:2113"),
+            },
+            DefaultCredentials = new UserCredentials("admin", "changeit")
+        });
     }
 }
