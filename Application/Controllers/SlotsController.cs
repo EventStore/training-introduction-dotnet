@@ -42,7 +42,7 @@ public class SlotsController : ControllerBase
     [Route("my-slots/{patientId}")]
     public List<PatientSlot> MySlots(string patientId)
     {
-        return _patientSlotRepository.getPatientSlots(patientId);
+        return _patientSlotRepository.GetPatientSlots(patientId);
     }
 
     [HttpPost]

@@ -31,7 +31,7 @@ public class PatientSlotsProjectionTest : ProjectionTest
         Given();
         Then(
             new List<PatientSlot>(),
-            _repository.getPatientSlots(_patientId)
+            _repository.GetPatientSlots(_patientId)
         );
     }
 
@@ -42,7 +42,7 @@ public class PatientSlotsProjectionTest : ProjectionTest
         Given(scheduled);
         Then(
             new List<PatientSlot>(),
-            _repository.getPatientSlots(_patientId)
+            _repository.GetPatientSlots(_patientId)
         );
     }
 

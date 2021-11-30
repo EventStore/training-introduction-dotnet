@@ -11,7 +11,7 @@ public class InMemoryPatientSlotsRepository : IPatientSlotsRepository
 
     private static Dictionary<String, List<PatientSlot>> _patientSlots = new Dictionary<string, List<PatientSlot>>();
 
-    public List<PatientSlot> getPatientSlots(string patientId)
+    public List<PatientSlot> GetPatientSlots(string patientId)
     {
         if (_patientSlots.ContainsKey(patientId))
         {
