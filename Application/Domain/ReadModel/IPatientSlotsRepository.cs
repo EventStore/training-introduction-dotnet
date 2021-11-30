@@ -4,7 +4,7 @@ namespace Application.Domain.ReadModel;
 
 public interface IPatientSlotsRepository
 {
-    List<PatientSlot> getPatientSlots(string patientId);
+    List<PatientSlot> GetPatientSlots(string patientId);
     void Add(ScheduledSlot scheduledSlot);
     void MarkAsBooked(string id, string patientId);
     void MarkAsCancelled(string scheduledEventId);

@@ -34,14 +34,14 @@ public class SlotsController : ControllerBase
     [Route("available/{date}")]
     public List<AvailableSlot> AvailableSlots(DateTime date)
     {
-        return _availableSlotsRepository.getSlotsAvailableOn(date);
+        return _availableSlotsRepository.GetSlotsAvailableOn(date);
     }
 
     [HttpGet]
     [Route("my-slots/{patientId}")]
     public List<PatientSlot> MySlots(string patientId)
     {
-        return _patientSlotRepository.getPatientSlots(patientId);
+        return _patientSlotRepository.GetPatientSlots(patientId);
     }
 
     [HttpPost]

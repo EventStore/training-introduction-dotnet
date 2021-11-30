@@ -29,7 +29,7 @@ public class InMemoryAvailableSlotsRepository: IAvailableSlotsRepository
         _available.Add(slot);
     }
 
-    public List<AvailableSlot> getSlotsAvailableOn(DateTime date)
+    public List<AvailableSlot> GetSlotsAvailableOn(DateTime date)
     {
         return _available.Where(s => s.ScheduledStartTime.Date == date).ToList();
     }
