@@ -1,55 +1,77 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System;
 using Application.Application;
+using Application.Domain.ReadModel;
+using Application.Domain.WriteModel.Commands;
+using Application.Infrastructure.Commands;
+using Application.Infrastructure.ES;
 using Application.Infrastructure.InMemory;
 using Application.Infrastructure.Projections;
 using Application.Infrastructure.Projections.Scheduling.Domain.Infrastructure.Projections;
 using EventStore.Client;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Scheduling.Domain.Infrastructure.Commands;
 
-namespace Application
+var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+
+services.AddControllers().AddNewtonsoftJson();
+
+var client = GetEventStoreClient();
+
+var eventStore = new EsEventStore(client);
+var aggregateStore = new EsAggregateStore(eventStore);
+var handlers = new Handlers(aggregateStore);
+
+services.AddSingleton(client);
+services.AddSingleton(new CommandHandlerMap(handlers));
+services.AddSingleton<Dispatcher>();
+services.AddSingleton<IPatientSlotsRepository, InMemoryPatientSlotsRepository>();
+services.AddSingleton<IAvailableSlotsRepository, InMemoryAvailableSlotsRepository>();
+
+builder.Services.AddSwaggerGen(c =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var client = GetEventStoreClient();
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Patients API", Description = "API for booking doctor appointments", Version = "v1" });
+});
 
-            var availableSlotsRepository = new InMemoryAvailableSlotsRepository();
-            var patientSlotsRepository = new InMemoryPatientSlotsRepository();
+var app = builder.Build();
+        var patientSlotsRepository = new InMemoryPatientSlotsRepository();
 
-            var subManager = new SubscriptionManager(
-                client,
-                "Slots",
-                StreamName.AllStream,
-                new Projector(new AvailableSlotsProjection(availableSlotsRepository)),
-                new Projector(new PatientSlotsProjection(patientSlotsRepository)));
-
-            subManager.Start();
-
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-
-        private static EventStoreClient GetEventStoreClient()
-        {
-            return new EventStoreClient(new EventStoreClientSettings
-            {
-                ConnectivitySettings =
-                {
-                    Address = new Uri("http://localhost:2113"),
-                },
-                DefaultCredentials = new UserCredentials("admin", "changeit")
-            });
-        }
-    }
+if (!app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Patients API");
+});
+
+var availableSlotsRepository = new InMemoryAvailableSlotsRepository();
+
+var subManager = new SubscriptionManager(
+    client,
+    "Slots",
+    StreamName.AllStream,
+    new Projector(new AvailableSlotsProjection(availableSlotsRepository)),
+    new Projector(new PatientSlotsProjection(patientSlotsRepository))
+);
+
+subManager.Start();
+
+app.Run();
+
+static EventStoreClient GetEventStoreClient() =>
+    new(EventStoreClientSettings.Create("esdb://localhost:2113?tls=false"));

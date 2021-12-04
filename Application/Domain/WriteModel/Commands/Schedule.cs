@@ -1,21 +1,10 @@
 using System;
 using Application.EventSourcing;
 
-namespace Application.Domain.WriteModel.Commands
-{
-    public class Schedule : Command
-    {
-        public string Id { get; }
+namespace Application.Domain.WriteModel.Commands;
 
-        public DateTime StartTime { get; }
-
-        public TimeSpan Duration { get; }
-
-        public Schedule(string id, DateTime startTime, TimeSpan duration)
-        {
-            Id = id;
-            StartTime = startTime;
-            Duration = duration;
-        }
-    }
-}
+public record Schedule(
+    string Id,
+    DateTime StartTime,
+    TimeSpan Duration
+): ICommand;
