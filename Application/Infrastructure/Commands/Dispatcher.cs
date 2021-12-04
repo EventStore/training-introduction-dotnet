@@ -3,32 +3,31 @@ using System.Threading.Tasks;
 using Application.EventSourcing;
 using Application.Infrastructure.Commands;
 
-namespace Scheduling.Domain.Infrastructure.Commands
+namespace Scheduling.Domain.Infrastructure.Commands;
+
+public class Dispatcher
 {
-    public class Dispatcher
+    private readonly CommandHandlerMap _map;
+
+    public Dispatcher(CommandHandlerMap map) =>
+        _map = map;
+
+    public Task Dispatch(object command)
     {
-        private readonly CommandHandlerMap _map;
+        var handler = _map.Get(command);
 
-        public Dispatcher(CommandHandlerMap map) =>
-            _map = map;
-
-        public Task Dispatch(object command)
+        if (handler == null)
         {
-            var handler = _map.Get(command);
-
-            if (handler == null)
-            {
-                throw new HandlerNotFoundException(command);
-            }
-            return handler(command);
+            throw new HandlerNotFoundException(command);
         }
+        return handler(command);
     }
+}
 
-    public class HandlerNotFoundException : Exception
+public class HandlerNotFoundException : Exception
+{
+    public HandlerNotFoundException(object type) :
+        base($"No handler found for {type.GetType().Name}")
     {
-        public HandlerNotFoundException(object type) :
-            base($"No handler found for {type.GetType().Name}")
-        {
-        }
     }
 }

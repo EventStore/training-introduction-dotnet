@@ -3,23 +3,22 @@ using Application.EventSourcing;
 using Application.Infrastructure.Projections;
 using Xunit;
 
-namespace Application.Test.Test
+namespace Application.Test.Test;
+
+public abstract class ProjectionTest
 {
-    public abstract class ProjectionTest
+    protected abstract Projection GetProjection();
+
+        private Projection _projection = default!;
+
+    protected void Given(params IEvent[] events)
     {
-        protected abstract Projection GetProjection();
+        _projection = GetProjection();
+        events.ToList().ForEach(e => _projection.Handle(e.GetType(), e));
+    }
 
-        private Projection _projection;
-
-        protected void Given(params Event[] events)
-        {
-            _projection = GetProjection();
-            events.ToList().ForEach(e => _projection.Handle(e.GetType(), e));
-        }
-
-        protected void Then(object expected, object actual)
-        {
-            Assert.Equal(expected, actual);
-        }
+    protected void Then(object expected, object actual)
+    {
+        Assert.Equal(expected, actual);
     }
 }

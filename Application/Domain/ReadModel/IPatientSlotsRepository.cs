@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 
-namespace Application.Domain.ReadModel
+namespace Application.Domain.ReadModel;
+
+public interface IPatientSlotsRepository
 {
-    public interface IPatientSlotsRepository
-    {
-        List<PatientSlot> getPatientSlots(string patientId);
-        void Add(ScheduledSlot scheduledSlot);
-        void MarkAsBooked(string id, string patientId);
-        void MarkAsCancelled(string scheduledEventId);
-        void Clear();
-    }
+    List<PatientSlot> GetPatientSlots(string patientId);
+    void Add(ScheduledSlot scheduledSlot);
+    void MarkAsBooked(string id, string patientId);
+    void MarkAsCancelled(string scheduledEventId);
+    void Clear();
 }
