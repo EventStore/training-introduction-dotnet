@@ -3,19 +3,17 @@ using Application.Domain.ReadModel;
 using Application.Domain.WriteModel.Events;
 using Application.Infrastructure.Projections;
 
-namespace Application.Application
+namespace Application.Application;
+
+public class AvailableSlotsProjection : Projection
 {
-    public class AvailableSlotsProjection : Projection
+    public AvailableSlotsProjection(IAvailableSlotsRepository repo)
     {
-        public AvailableSlotsProjection(IAvailableSlotsRepository repo)
+        When<Scheduled>(e =>
         {
-            When<Scheduled>(e =>
-            {
-                // repo.Add();
-                return Task.CompletedTask;
-            });
+            // repo.Add();
+            return Task.CompletedTask;
+        });
 
-        }
     }
-
 }

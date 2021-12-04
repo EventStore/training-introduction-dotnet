@@ -1,8 +1,7 @@
 using System;
 
-namespace Application.Domain.WriteModel.Exceptions
+namespace Application.Domain.WriteModel.Exceptions;
+
+public class SlotNotBookedException : Exception
 {
-    public class SlotNotBookedException : Exception
-    {
-    }
 }
