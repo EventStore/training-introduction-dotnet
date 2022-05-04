@@ -14,14 +14,19 @@ public class Handlers : CommandHandler
             await aggregateStore.Save(aggregate);
         });
 
-        // Register<Book>(async s =>
-        // {
-        //
-        // });
-        //
-        // Register<Cancel>(async s =>
-        // {
-        //
-        // });
+        Register<Book>(async b =>
+        {
+            // var (id, patientId) = b;
+            // var aggregate = await aggregateStore.Load<SlotAggregate>(id);
+            // aggregate.Book(patientId);
+            // await aggregateStore.Save(aggregate);
+        });
+        Register<Cancel>(async c =>
+        {
+            // var (id, reason, cancellationTime) = c;
+            // var aggregate = await aggregateStore.Load<SlotAggregate>(id);
+            // aggregate.Cancel(reason, cancellationTime);
+            // await aggregateStore.Save(aggregate);
+        });
     }
 }
