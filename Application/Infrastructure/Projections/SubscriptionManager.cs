@@ -36,11 +36,11 @@ namespace Application.Infrastructure.Projections
             {
                 _subscription = _isAllStream
                     ? await _client.SubscribeToAllAsync(
-                        Position.Start,
+                        FromAll.Start,
                         EventAppeared)
                     : await _client.SubscribeToStreamAsync(
                         _streamName,
-                        StreamPosition.Start,
+                        FromStream.Start,
                         EventAppeared
                     );
             }
