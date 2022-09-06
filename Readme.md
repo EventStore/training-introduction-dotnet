@@ -8,8 +8,8 @@
 2. Make sure you are on master branch.
 3. To start EventStoreDB using Docker, run:
    - `docker-compose up` - for X86-based computers,
-   - `docker-compose -f docker-compose.arm64.yml up` - for ARM-based computers like MacBook M1. 
-   
+   - `docker-compose -f docker-compose.arm64.yml up` - for ARM-based computers like MacBook M1.
+
       To access the github packages docker images, you need to authenticate docker with a gitub personal access token. It should be [generated](https://github.com/settings/tokens/new). Select at least following scopes: `repo`, `read:packages`. Then login to github docker registry with:
       ```shell script
       docker login https://ghcr.io -u  -u YOUR_GITHUB_USERNAME -p YOUR_PERSONAL_ACCESS_TOKEN
@@ -18,5 +18,20 @@
 4. Open solution in IDE and run all tests using
    - `dotnet test` command,
    - or run through your IDE test runner.
+
+### Visual Studio for Mac (Preview) v17
+
+- Right Click on the `Scheduling` in Solution Explorer
+
+    ![show terminal via right click in solution explorer](images/show-open-terminal.png)
+
+- Open Terminal
+- Type `dotnet test`
+- You should see `Passed!  - Failed:     0, Passed:    17, Skipped:     0, Total:    17`
+
+    ![dotnet test in terminal](images/dotnet-test-terminal.png)
+
+
+
 
 Any problems please contact training@eventstore.com
